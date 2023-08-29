@@ -17,8 +17,7 @@ Namespace WindowsApplication33
 		End Sub
 
 
-		Private disabledItems As New List(Of String)(New String() {"Left", "Right"})
-		Dim selectionCancelled As Boolean = False
+		Private disabledItems As New List(Of String)(New String() { "Left", "Right" })
 		Private Sub Form1_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
 			imageComboBoxEdit1.Properties.SmallImages = imageList1
 			imageComboBoxEdit1.Properties.LargeImages = imageList2
@@ -29,26 +28,15 @@ Namespace WindowsApplication33
 			imageComboBoxEdit1.Properties.Items.Add(New ImageComboBoxItem("Cancel", 3))
 
 			AddHandler imageComboBoxEdit1.Properties.DrawItem, AddressOf Properties_DrawItem
-			AddHandler imageComboBoxEdit1.Properties.QueryCloseUp, AddressOf Properties_QueryCloseUp
-			AddHandler imageComboBoxEdit1.Properties.CloseUp, AddressOf Properties_CloseUp
+			AddHandler imageComboBoxEdit1.Properties.EditValueChanging, AddressOf Properties_EditValueChanging
 
 			Dim i As New ImageComboBoxItem()
 		End Sub
-		Private Sub Properties_CloseUp(ByVal sender As Object, ByVal e As CloseUpEventArgs)
-			e.AcceptValue = Not selectionCancelled
-		End Sub
 
-		Private Sub Properties_QueryCloseUp(ByVal sender As Object, ByVal e As CancelEventArgs)
-			Dim edit As ImageComboBoxEdit = TryCast(sender, ImageComboBoxEdit)
-			If edit.GetPopupEditForm() IsNot Nothing Then
-				Dim selectedItemIndex As Integer = edit.GetPopupEditForm().SelectedItemIndex
-				Dim selectedItem As String = edit.Properties.Items(selectedItemIndex).ToString()
-				If disabledItems.Contains(selectedItem) Then
-					e.Cancel = True
-				End If
+		Private Sub Properties_EditValueChanging(ByVal sender As Object, ByVal e As ChangingEventArgs)
+			If e.NewValue IsNot Nothing AndAlso disabledItems.Contains(e.NewValue.ToString()) Then
+				e.Cancel = True
 			End If
-
-			selectionCancelled = e.Cancel
 		End Sub
 
 		Private Sub Properties_DrawItem(ByVal sender As Object, ByVal e As DevExpress.XtraEditors.ListBoxDrawItemEventArgs)
