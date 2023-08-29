@@ -19,6 +19,7 @@ namespace WindowsApplication33
 
 
         List<String> disabledItems = new List<string>(new string[] { "Left", "Right" });
+        bool selectionCancelled = false;
         private void Form1_Load(object sender, EventArgs e)
         {
             imageComboBoxEdit1.Properties.SmallImages = imageList1;
@@ -30,15 +31,27 @@ namespace WindowsApplication33
             imageComboBoxEdit1.Properties.Items.Add(new ImageComboBoxItem("Cancel", 3));
 
             imageComboBoxEdit1.Properties.DrawItem += new DevExpress.XtraEditors.ListBoxDrawItemEventHandler(Properties_DrawItem);
-            imageComboBoxEdit1.Properties.EditValueChanging += new ChangingEventHandler(Properties_EditValueChanging);
+            imageComboBoxEdit1.Properties.CloseUp += new CloseUpEventHandler(Properties_CloseUp);
+            imageComboBoxEdit1.Properties.QueryCloseUp += new CancelEventHandler(Properties_QueryCloseUp);
 
             ImageComboBoxItem i = new ImageComboBoxItem();
         }
 
-        void Properties_EditValueChanging(object sender, ChangingEventArgs e)
-        {
-            if ( e.NewValue != null && disabledItems.Contains(e.NewValue.ToString()))
-                e.Cancel = true;
+        private void Properties_CloseUp(object sender, CloseUpEventArgs e) {
+            e.AcceptValue = !selectionCancelled;
+        }
+
+        private void Properties_QueryCloseUp(object sender, CancelEventArgs e) {
+            ImageComboBoxEdit edit = sender as ImageComboBoxEdit;
+            if(edit.GetPopupEditForm() != null) {
+                int selectedItemIndex = edit.GetPopupEditForm().SelectedItemIndex;
+                string selectedItem = edit.Properties.Items[selectedItemIndex].ToString();
+                if (disabledItems.Contains(selectedItem)) {
+                    e.Cancel = true;
+                }
+            }
+
+            selectionCancelled = e.Cancel;
         }
 
         void Properties_DrawItem(object sender, DevExpress.XtraEditors.ListBoxDrawItemEventArgs e)
