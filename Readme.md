@@ -12,7 +12,7 @@
 # ImageComboBoxEdit - how to disable specific items selection
 
 
-<p>This example demonstrates how to disable selecting of specific items using certain events.</p>
+<p>This example demonstrates how to handle the <a href="https://docs.devexpress.com/WindowsForms/DevExpress.XtraEditors.Repository.RepositoryItemPopupBase.CloseUp">RepositoryItemPopupBase.CloseUp</a>, <a href="https://docs.devexpress.com/WindowsForms/DevExpress.XtraEditors.Repository.RepositoryItemPopupBase.QueryCloseUp">RepositoryItemPopupBase.QueryCloseUp</a>, and <a href="http://documentation.devexpress.com/#WindowsForms/DevExpressXtraEditorsRepositoryRepositoryItemComboBox_DrawItemtopic">RepositoryItemComboBox.DrawItem</a> events to disable selecting of specific items.</p>
 
 <br/>
 
